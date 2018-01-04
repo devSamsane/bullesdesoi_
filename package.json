@@ -1,0 +1,21 @@
+{
+  "name": "bullesdesoi",
+  "version": "0.0.0",
+  "description": "web application bullesdesoi.com",
+  "author": "Samsa@ne",
+  "license": "ISC",
+  "private": true,
+  "bugs": {
+    "url": "https://github.com/devSamsane/bullesdesoi_/issues"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    
+  },
+  "devDependencies": {
+    
+  }
+
+}
