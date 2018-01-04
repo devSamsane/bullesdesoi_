@@ -12,10 +12,7 @@
     "start": "node server.js"
   },
   "dependencies": {
-    
+    "@angular/cli": "^1.6.3"
   },
-  "devDependencies": {
-    
-  }
-
+  "devDependencies": {}
 }
