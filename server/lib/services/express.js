@@ -71,8 +71,14 @@ module.exports.initMiddlewares = app => {
  * TODO: au démarrage utilisation uniquement d'une route root et renvoi d'un message. A modifier ensuite
  */
 module.exports.initViewEngine = app => {
-  // TODO: A intégrer par la suite express-hbs
-  // déclaration de la route server
+  app.engine('hbs', hbs.express4({
+    partialsDir: [
+      path.resolve('./server/modules/core/views/')
+    ],
+    extname: '.html'
+  }));
+  app.set('view engine', 'hbs');
+  app.set('views', path.resolve('./server/modules/core/views'));
 };
 
 /**
@@ -88,6 +94,15 @@ module.exports.initModulesConfiguration = app => {
     });
   }
 };
+
+/**
+ * Initialisation des fichiers statiques
+ * @name initModulesClientRoutes
+ * @param {object} app objet représentant l'instance de l'application express
+ */
+module.exports.initModulesClientRoutes = app => {
+  app.use('/', express.static(path.resolve('./server/modules/core/views')));
+}
 
 /**
  * Initialisation des routes server
@@ -116,7 +131,10 @@ module.exports.init = () => {
   this.initMiddlewares(app);
 
   // Activation du moteur HTML
-  // this.initViewEngine(app);
+  this.initViewEngine(app);
+
+  // Activation des routes statiques client
+  this.initModulesClientRoutes(app);
 
   // Activation de la configuration server
   this.initModulesConfiguration(app);

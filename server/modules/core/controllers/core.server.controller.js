@@ -3,5 +3,5 @@
  * @name coreTemplate
  */
 exports.coreTemplate = (req, res, next) => {
-  res.send('Bienvenue sur Bulles de Soi - ExpressJS')
+  res.render('index');
 };
