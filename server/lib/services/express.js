@@ -30,3 +30,99 @@ module.exports.initLocalVariables = app => {
     next();
   });
 };
+
+/**
+ * Initialisation du module middlewares
+ * Déclaration et paramétrage des middlewares expressJS
+ * @name initMiddlewares
+ * @param {object} app objet représentant l'instance de l'application express
+ */
+module.exports.initMiddlewares = app => {
+  // Déclaration du middleware: Compression
+  app.use(compress({
+    filter: (req, res) => {
+      return (/json|text|javascript|css|font|svg/).test(res.getHeader('Content-Type'));
+    },
+    level: 9
+  }));
+
+  // Déclaration du middleware: Body-parser
+  app.use(bodyParser.urlencoded({
+    extended: true
+  }));
+  app.use(bodyParser.json());
+
+  // Déclaration du middleware: Method-override
+  // Doit être placé avant les autres middleware nécessitant d'avoir accès aux méthodes HTTP
+  app.use(methodOverride());
+
+  // Autorisation Access-Control-Allow-Origin
+  app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin X-Requested-With Content-Type');
+    next();
+  });
+};
+
+
+/**
+ * Initialisation du module de moteur HTML
+ * Utilisation de express handlebar
+ * TODO: au démarrage utilisation uniquement d'une route root et renvoi d'un message. A modifier ensuite
+ */
+module.exports.initViewEngine = app => {
+  // TODO: A intégrer par la suite express-hbs
+  // déclaration de la route server
+};
+
+/**
+ * Initialisation de la configuration server
+ * Appel des fichiers config
+ */
+module.exports.initModulesConfiguration = app => {
+  if (!config.files.server.config) {
+    return '';
+  } else {
+    config.files.server.configs.forEach(configPath => {
+      require(path.resolve(configPath))(app);
+    });
+  }
+};
+
+/**
+ * Initialisation des routes server
+ * @name initModulesServerRoutes
+ * @param {object} app objet représentant l'instance de l'application express
+ */
+module.exports.initModulesServerRoutes = app => {
+  // Définition de la route server par défaut
+  config.files.server.routes.forEach(routePath => {
+    require(path.resolve(routePath))(app);
+  });
+};
+
+/**
+ * Initialisation de l'instance app expressJS
+ * @name init
+ * @returns {object} app application express
+ */
+module.exports.init = () => {
+  const app = express();
+
+  // Activation des variables locales
+  this.initLocalVariables(app);
+
+  // Activation des middlewares
+  this.initMiddlewares(app);
+
+  // Activation du moteur HTML
+  // this.initViewEngine(app);
+
+  // Activation de la configuration server
+  this.initModulesConfiguration(app);
+
+  // Activation des routes server
+  this.initModulesServerRoutes(app);
+
+  return app;
+};

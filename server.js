@@ -1,14 +1,11 @@
-const http = require('http');
+// dépendances NPM
+const chalk = require('chalk');
 
-const hostname = '127.0.0.1';
-const port = 3000;
+// dépendances locales
+const app = require('./server/lib/app');
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World\n');
-});
-
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+app.start()
+  .catch(error => {
+    console.warn(chalk.red(`+ Erreur: échec du démarrage du serveur ${error.message}`));
+    throw (error);
+  });
