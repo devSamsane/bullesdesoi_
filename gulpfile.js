@@ -58,11 +58,35 @@ gulp.task('watch', () => {
 });
 
 /**
+ * Gulp Task: Tâche ESLint
+ * @name eslint
+ */
+gulp.task('eslint', () => {
+  const assets = _.union(
+    defaultAssets.server.gulpConfig,
+    defaultAssets.server.allJS,
+    defaultAssets.server.models
+  );
+
+  return gulp.src(assets)
+    .pipe(plugins.eslint())
+    .pipe(plugins.eslint.format());
+});
+
+/**
+ * Gulp Sequence: Merge des tâches eslint et css
+ * @name lint
+ */
+gulp.task('lint', done => {
+  runSequence('eslint', done);
+});
+
+/**
  * Gulp Sequence: Merge des tâches env:dev, nodemon, watch
  * Démarrage de l'application en env. de développement
  * @name default
  */
 gulp.task('default', done => {
-  runSequence('env:dev', ['nodemon', 'watch'], done);
+  runSequence('lint', 'env:dev', ['nodemon', 'watch'], done);
 });
 
