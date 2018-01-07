@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const hbs = require('express-hbs');
 const helmet = require('helmet');
+const lusca = require('lusca')
 
 // dépendances internes
 const config = require('../config/config');
@@ -68,6 +69,10 @@ module.exports.initMiddlewares = app => {
     res.setHeader('Access-Control-Allow-Headers', 'Origin X-Requested-With Content-Type');
     next();
   });
+
+  // Déclaration de lusca
+  // TODO: A retirer si ce n'est pas utile au final
+  app.use(lusca(config.csrf));
 };
 
 

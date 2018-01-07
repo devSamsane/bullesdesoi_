@@ -12,5 +12,12 @@ module.exports = {
       maxFiles: 2,
       json: true
     }
+  },
+  csrf: {
+    csrf: false,
+    csp: false,
+    xframe: 'SAMEORIGIN',
+    p3p: 'ABCDEF',
+    xssProtection: true
   }
 };
