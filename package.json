@@ -32,6 +32,7 @@
     "@types/lodash": "^4.14.91",
     "@types/lusca": "^1.5.0",
     "@types/method-override": "0.0.31",
+    "@types/mongoose": "^4.7.32",
     "@types/winston": "^2.3.7",
     "@types/zone.js": "^0.5.12",
     "body-parser": "^1.18.2",
@@ -47,6 +48,7 @@
     "lodash": "^4.17.4",
     "lusca": "^1.5.2",
     "method-override": "^2.3.10",
+    "mongoose": "^5.0.0-rc2",
     "rxjs": "^5.5.2",
     "winston": "^2.4.0",
     "zone.js": "^0.8.14"

@@ -4,6 +4,20 @@ const chalk = require('chalk');
 // dépendances locales
 const config = require('./config/config');
 const express = require('./services/express');
+const mongoose = require('./services/mongoose');
+
+
+function startMongoose() {
+  return new Promise((resolve, reject) => {
+    mongoose.connect()
+      .then(dbConnection => {
+        resolve(dbConnection);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+}
 
 /**
  * Initialisation de l'application expressJS
@@ -31,14 +45,17 @@ function startExpress() {
 function bootstrap () {
   return new Promise(async (resolve, reject) => {
     let app;
+    let db;
 
     try {
+      db = await startMongoose();
       app = await startExpress();
     } catch (error) {
-      return reject(new Error('+ Erreur: impossible d\'intialiser l\'instance expressJS'));
+      return reject(new Error('+ Erreur: impossible d\'intialiser l\'instance expressJS ou le serveur MongoDB'));
     }
 
     return resolve({
+      db: db,
       app: app
     });
   });
@@ -54,9 +71,10 @@ exports.bootstrap = bootstrap;
 exports.start = function start () {
   return new Promise(async (resolve, reject) => {
     let app;
+    let db;
 
     try {
-      ({ app } = await bootstrap());
+      ({ db, app } = await bootstrap());
     } catch (error) {
       return reject(error);
     }
@@ -70,11 +88,13 @@ exports.start = function start () {
       console.info();
       console.info(chalk.green(`Environnement:    ${process.env.NODE_ENV}`));
       console.info(chalk.green(`Serveur:          ${server}`));
+      console.info(chalk.green(`Database:          ${config.db.uri}`));
       console.info(chalk.bgMagenta(`App version:  ${config.bullesdesoi.version}`));
       console.info(chalk.white('---'));
     });
 
     return resolve({
+      db: db,
       app: app
     });
   });

@@ -19,5 +19,20 @@ module.exports = {
     xframe: 'SAMEORIGIN',
     p3p: 'ABCDEF',
     xssProtection: true
+  },
+  db: {
+    promise: global.Promise,
+    options: {
+      // Paramètres nécessaires pour activer l'auth par certificat sous mongodb
+      // ssl: true,
+      // sslValidate: false,
+      // checkServerIdentity: false,
+      // sslCA: fs.readFileSync('../sslcerts/ssl-ca.pem'),
+      // sslCert: fs.readFileSync('../sslcerts/ssl-cert.pem'),
+      // sslKey: fs.readFileSync('../sslcerts/ssl-key.pem'),
+      // sslPass: 'Q0J%6Luc~<4|)73'
+    },
+    // Activation du mode debug
+    debug: process.env.MONGODB_DEBUG || false
   }
 };
