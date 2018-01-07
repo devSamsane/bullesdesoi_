@@ -7,6 +7,7 @@ const compress = require('compression');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const hbs = require('express-hbs');
+const helmet = require('helmet');
 
 // dépendances internes
 const config = require('../config/config');
@@ -82,8 +83,32 @@ module.exports.initViewEngine = app => {
 };
 
 /**
+ * Initialisation du middleware Helmet
+ * @name initHelmetHeaders
+ * @param {object} app objet représentant l'instance de l'application express
+ */
+module.exports.initHelmetHeaders = app => {
+  // Définition du max_age pour la configuration hsts (Strict-Transport-Security HTTP)
+  // Le navigateur visitera seulement le site en https pour les visites dans les max_age jours
+  const SIX_MONTHS = 15778476000;
+
+  app.use(helmet.frameguard()); // Protection clickjacking
+  app.use(helmet.xssFilter()); // Protection XSS (faible)
+  app.use(helmet.noSniff()); // Protection sniffing MIME type
+  app.use(helmet.ieNoOpen()); // Configuration X-Download-Options IE8+
+  app.use(helmet.hsts({
+    maxAge: SIX_MONTHS,
+    includeSubdomains: true,
+    force: true
+  }));
+  app.use(helmet.hidePoweredBy()); // Ne pas afficher x-powered-by
+};
+
+/**
  * Initialisation de la configuration server
  * Appel des fichiers config
+ * @name initModulesConfiguration
+ * @param {object} app objet représentant l'instance de l'application express
  */
 module.exports.initModulesConfiguration = app => {
   if (!config.files.server.config) {
@@ -129,6 +154,9 @@ module.exports.init = () => {
 
   // Activation des middlewares
   this.initMiddlewares(app);
+
+  // Activation de Helmet
+  this.initHelmetHeaders(app);
 
   // Activation du moteur HTML
   this.initViewEngine(app);
