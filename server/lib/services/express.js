@@ -11,6 +11,8 @@ const helmet = require('helmet');
 
 // dépendances internes
 const config = require('../config/config');
+const log = require('./logger').log();
+const expressLogger = require('./logger').logExpress();
 
 /**
  * Initialisation des variables locales expressJS
@@ -46,6 +48,9 @@ module.exports.initMiddlewares = app => {
     },
     level: 9
   }));
+
+  // Déclaration du logger
+  app.use(expressLogger);
 
   // Déclaration du middleware: Body-parser
   app.use(bodyParser.urlencoded({
