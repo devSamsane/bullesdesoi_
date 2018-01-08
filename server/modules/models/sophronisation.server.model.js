@@ -37,6 +37,14 @@ const SophronisationSchema = new Schema({
   },
   updated: {
     type: Date
+  },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  seance: {
+    type: Schema.Types.ObjectId,
+    ref: 'Seance'
   }
 });
 

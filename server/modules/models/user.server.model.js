@@ -82,7 +82,11 @@ const UserSchema = new Schema({
       enum: ['active', 'disabled']
     }],
     default: ['active']
-  }
+  },
+  seances: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Seance'
+  }]
 });
 
 /**

@@ -24,8 +24,20 @@ const SeanceSchema = new Schema({
   },
   updated: {
     type: Date
-  }
-})
+  },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  relaxations: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Relaxation'
+  }],
+  sophronisations: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Sophronisation'
+  }]
+});
 
 /**
 * Initialisation du model Seance
