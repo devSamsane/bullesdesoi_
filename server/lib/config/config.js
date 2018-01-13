@@ -121,6 +121,9 @@ const initGlobalConfigFiles = (config, assets) => {
     client: {}
   };
 
+  // Récupération des fichiers models mongoose
+  config.files.server.models = getGlobbedPaths(assets.server.models);
+
   // Récupération des fichiers de configuration
   config.files.configs = getGlobbedPaths(assets.server.config);
 

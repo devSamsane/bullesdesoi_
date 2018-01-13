@@ -9,6 +9,20 @@ const mongoose = require('mongoose');
 const config = require('../config/config');
 
 /**
+ * Chargement des models mongoose
+ * @name loadModels
+ */
+module.exports.loadModels = () => {
+  return new Promise((resolve, reject) => {
+    config.files.server.models.forEach(modelPath => {
+      require(path.resolve(modelPath));
+    });
+
+    resolve();
+  });
+};
+
+/**
  * Connexion au serveur MongoDB
  * Nécessaire de le démarrer au préalable
  * @name connect

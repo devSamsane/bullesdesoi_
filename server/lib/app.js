@@ -5,11 +5,14 @@ const chalk = require('chalk');
 const config = require('./config/config');
 const express = require('./services/express');
 const mongoose = require('./services/mongoose');
+const seed = require('./services/seed');
 
+let seedDbObject = [];
 
 function startMongoose() {
   return new Promise((resolve, reject) => {
-    mongoose.connect()
+    mongoose.loadModels()
+      .then(mongoose.connect)
       .then(dbConnection => {
         resolve(dbConnection);
       })
