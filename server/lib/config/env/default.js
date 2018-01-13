@@ -34,5 +34,25 @@ module.exports = {
     },
     // Activation du mode debug
     debug: process.env.MONGODB_DEBUG || false
+  },
+  msg: {
+    global: {
+      default: 'La validation du `{PATH}` a échoué pour la valeur `{VALUE}`',
+      required: 'Le `{PATH}` est un champs obligatoire'
+    },
+    number: {
+      min: 'La `{VALUE}` est inférieure à la valeur minimum requise `{MIN}`',
+      max: 'La `{VALUE}` est supérieure à la valeur maximum requise `{MAX}`'
+    },
+    date: {
+      min: 'Le `{PATH}` ({VALUE}) est inférieur à la date minimum requise ({MIN})',
+      max: 'Le `{PATH}` ({VALUE}) est supérieur à la date maximum requise ({MAX})'
+    },
+    string: {
+      enum: 'La valeur `{VALUE}` n\'est pas autorisée pour le champs `{PATH}`',
+      match: 'La valeur `{VALUE}` est invalide pour le champs `{PATH}`',
+      minlength: 'Champs `{PATH}`: la ({VALUE}) est inférieur au minimum requis ({MINLENGTH})',
+      maxlength: 'Champs `{PATH}`: la ({VALUE}) est supérieur au maximum requis ({MAXLENGTH})'
+    }
   }
 };

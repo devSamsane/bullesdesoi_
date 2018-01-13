@@ -14,22 +14,22 @@ const Schema = mongoose.Schema;
 const SophronisationSchema = new Schema({
   description: {
     type: String,
-    required: true
+    required: [true, config.msg.global.required]
   },
   intention: {
     type: String,
-    required: true
+    required: [true, config.msg.global.required]
   },
   type: {
     type: [{
       type: String,
       enum: ['présentation', 'futurisation', 'prétérisation', 'totalisation']
     }],
-    required: true
+    required: [true, config.msg.string.enum]
   },
   name: {
     type: String,
-    required: true
+    required: [true, config.msg.global.required]
   },
   created: {
     type: Date,
@@ -49,8 +49,15 @@ const SophronisationSchema = new Schema({
   }
 });
 
+// Export de la fonction seed du model
 SophronisationSchema.statics.seed = seed;
 
+/**
+ * Seed du model
+ * @name seed
+ * @param {object} doc objet user correspondant à l'objet dans env/default.js
+ * @param {object} options object options correspondant à l'objet dans env/default.js
+ */
 function seed(doc, options) {
   const Sophronisation = mongoose.model('Sophronisation');
   const Seance = mongoose.model('Seance');
@@ -66,6 +73,7 @@ function seed(doc, options) {
         return reject(error);
       });
 
+    // Vérification de l'abandon ou non du seed
     function skipDocument() {
       return new Promise((resolve, reject) => {
         Sophronisation
@@ -92,6 +100,7 @@ function seed(doc, options) {
       });
     }
 
+    // Ajout de la sophronisation
     function add(skip) {
       return new Promise((resolve, reject) => {
         if (skip) {

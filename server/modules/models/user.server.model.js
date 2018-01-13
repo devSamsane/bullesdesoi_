@@ -1,12 +1,23 @@
 // dépendances NPM
 const mongoose = require('mongoose');
 const chalk = require('chalk');
+const validator = require('validator');
 
 // dépendances locales
 const config = require('./../../lib/config/config');
 
 // Déclaration du schéma mongoose
 const Schema = mongoose.Schema;
+
+/**
+ * Vérification de la validité de l'adresse email
+ * @param {string} email email du user
+ */
+const validateLocalStrategyEmail = email => {
+  return ((this.provider !== 'local' && 'local' && !this.updated) || validator.isEmail(email, { require_tld: false }));
+};
+
+
 
 /**
  * Déclaration de la structure du model User
@@ -21,24 +32,25 @@ const UserSchema = new Schema({
     lowercase: true,
     trim: true,
     default: '',
-    required: true
+    required: [true, config.msg.global.required],
+    validate: [validateLocalStrategyEmail, 'Une adresse email correcte est requise']
   },
   firstname: {
     type: String,
     trim: true,
-    required: true
+    required: [true, config.msg.global.required]
   },
   lastname: {
     type: String,
     trim: true,
-    required: true
+    required: [true, config.msg.global.required]
   },
   displayName: {
     type: String
   },
   phoneNumber: {
     type: String,
-    required: true
+    required: [true, config.msg.global.required]
   },
   password: {
     type: String,
@@ -47,7 +59,7 @@ const UserSchema = new Schema({
   },
   provider: {
     type: String,
-    required: true
+    required: [true, config.msg.global.required]
   },
   providerData: {},
   additionnalProviderData: {},
@@ -57,7 +69,7 @@ const UserSchema = new Schema({
       enum: ['user', 'admin']
     }],
     default: ['user'],
-    required: true
+    required: [true, config.msg.global.required]
   },
   created: {
     type: Date,
@@ -90,8 +102,25 @@ const UserSchema = new Schema({
   }]
 });
 
+
+/**
+ * Initialisation du displayName
+ * Utilisation middleware pre validate de mongoose
+ */
+UserSchema.pre('validate', function (next) {
+  this.displayName = this.firstname + ' ' + this.lastname;
+  next();
+});
+
+// Export de la fonction seed du model
 UserSchema.statics.seed = seed;
 
+/**
+ * Seed du model
+ * @name seed
+ * @param {object} doc objet user correspondant à l'objet dans env/default.js
+ * @param {object} options object options correspondant à l'objet dans env/default.js
+ */
 function seed(doc, options) {
   const User = mongoose.model('User');
 
@@ -106,6 +135,7 @@ function seed(doc, options) {
         return reject(error);
       });
 
+    // Vérification de l'abandon ou non du seed
     function skipDocument() {
       return new Promise((resolve, reject) => {
         User
@@ -132,6 +162,7 @@ function seed(doc, options) {
       });
     }
 
+    // Ajout du user
     function add(skip) {
       return new Promise((resolve, reject) => {
         if (skip) {

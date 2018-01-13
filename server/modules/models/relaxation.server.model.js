@@ -42,8 +42,15 @@ const RelaxationSchema = new Schema({
   }
 });
 
+// Export de la fonction seed du model
 RelaxationSchema.statics.seed = seed;
 
+/**
+ * Seed du model
+ * @name seed
+ * @param {object} doc objet user correspondant à l'objet dans env/default.js
+ * @param {object} options object options correspondant à l'objet dans env/default.js
+ */
 function seed(doc, options) {
   const Relaxation = mongoose.model('Relaxation');
   const Seance = mongoose.model('Seance');
@@ -59,6 +66,7 @@ function seed(doc, options) {
         return reject(error);
       });
 
+    // Vérification de l'abandon ou non du seed
     function skipDocument() {
       return new Promise((resolve, reject) => {
         Relaxation
@@ -85,6 +93,7 @@ function seed(doc, options) {
       });
     }
 
+    // Ajout de la relaxation
     function add(skip) {
       return new Promise((resolve, reject) => {
         if (skip) {
