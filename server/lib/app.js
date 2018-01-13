@@ -7,8 +7,11 @@ const express = require('./services/express');
 const mongoose = require('./services/mongoose');
 const seed = require('./services/seed');
 
-let seedDbObject = [];
-
+/**
+ * Initialisation de mongoose
+ * Chargement des models et connexion à la db
+ * @name startMongoose
+ */
 function startMongoose() {
   return new Promise((resolve, reject) => {
     mongoose.loadModels()
@@ -41,6 +44,22 @@ function startExpress() {
 }
 
 /**
+ * Initialisation du seeding de la base de donnée
+ * @name startSeeding
+ */
+function startSeeding() {
+  return new Promise((resolve, reject) => {
+    if (config.seedDB.seed === 'active') {
+      console.info(chalk.bold.blue('Info: Le seeding est actif'));
+      seed.start();
+      resolve();
+    } else {
+      console.info(chalk.bold.blue('Info: Le seeding est inactif'));
+    }
+  });
+}
+
+/**
  * Bootstrap de l'application expressJS
  * @name bootstrap
  * @returns {object} app instance de l'application expressJS
@@ -49,17 +68,20 @@ function bootstrap () {
   return new Promise(async (resolve, reject) => {
     let app;
     let db;
+    let seed;
 
     try {
       db = await startMongoose();
       app = await startExpress();
+      seed = await startSeeding();
     } catch (error) {
       return reject(new Error('+ Erreur: impossible d\'intialiser l\'instance expressJS ou le serveur MongoDB'));
     }
 
     return resolve({
       db: db,
-      app: app
+      app: app,
+      seed: seed
     });
   });
 };

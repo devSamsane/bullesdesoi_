@@ -1,5 +1,6 @@
 // dépendances NPM
 const mongoose = require('mongoose');
+const chalk = require('chalk');
 
 // dépendances locales
 const config = require('./../../lib/config/config');
@@ -89,6 +90,77 @@ const UserSchema = new Schema({
   }]
 });
 
+UserSchema.statics.seed = seed;
+
+function seed(doc, options) {
+  const User = mongoose.model('User');
+
+  return new Promise((resolve, reject) => {
+
+    skipDocument()
+      .then(add)
+      .then((response) => {
+        return resolve(response);
+      })
+      .catch((error) => {
+        return reject(error);
+      });
+
+    function skipDocument() {
+      return new Promise((resolve, reject) => {
+        User
+          .findOne({
+            email: doc.email
+          })
+          .exec((error, existing) => {
+            if (error) {
+              return reject(error);
+            }
+            if (!existing) {
+              return resolve(false);
+            }
+            if (existing && !options.overwrite) {
+              return resolve(true);
+            }
+            existing.remove((error) => {
+              if (error) {
+                return reject(error);
+              }
+              return resolve(false)
+            });
+          });
+      });
+    }
+
+    function add(skip) {
+      return new Promise((resolve, reject) => {
+        if (skip) {
+          return resolve({
+            message: chalk.yellow('Database seeding: User ' + doc.email + ' abandonné')
+          });
+        }
+
+        const user = new User(doc);
+        user.provider = user.provider || 'local';
+        user.password = user.password || 'password';
+        user.updated = '';
+
+        user.save((error) => {
+          if (error) {
+            return reject(error);
+          }
+
+          return resolve({
+            message: 'Database seeding: User ' + user.email + ' ajouté avec le password - ' + user.password
+          });
+        });
+      })
+        .catch((error) => {
+          return reject(error);
+        })
+    }
+  });
+}
 /**
 * Initialisation du model User
 */
