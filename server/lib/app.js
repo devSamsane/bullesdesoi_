@@ -64,7 +64,7 @@ function startSeeding() {
  * @name bootstrap
  * @returns {object} app instance de l'application expressJS
  */
-function bootstrap () {
+function bootstrap() {
   return new Promise(async (resolve, reject) => {
     let app;
     let db;
@@ -74,6 +74,7 @@ function bootstrap () {
       db = await startMongoose();
       app = await startExpress();
       seed = await startSeeding();
+
     } catch (error) {
       return reject(new Error('+ Erreur: impossible d\'intialiser l\'instance expressJS ou le serveur MongoDB'));
     }
@@ -93,7 +94,7 @@ exports.bootstrap = bootstrap;
  * Démarrage de l'application
  * @name start
  */
-exports.start = function start () {
+exports.start = function start() {
   return new Promise(async (resolve, reject) => {
     let app;
     let db;
