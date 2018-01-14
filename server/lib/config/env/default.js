@@ -54,5 +54,14 @@ module.exports = {
       minlength: 'Champs `{PATH}`: la ({VALUE}) est inférieur au minimum requis ({MINLENGTH})',
       maxlength: 'Champs `{PATH}`: la ({VALUE}) est supérieur au maximum requis ({MAXLENGTH})'
     }
+  },
+  shared: {
+    owasp: {
+      allowPassphrases: true,
+      maxLength: 128,
+      minLength: 8,
+      minPhraseLength: 20,
+      minOptionalTestsToPass: 2
+    }
   }
 };
