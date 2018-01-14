@@ -152,6 +152,31 @@ module.exports.initModulesServerRoutes = app => {
 };
 
 /**
+ * Initialisation de l'error handler
+ * @name initModuleErrorHandler
+ * @param {object} app objet représentant l'instance de l'application express
+ */
+module.exports.initModuleErrorHandler = app => {
+  app.use((err, req, res, next) => {
+    // Vérification de l'existence de l'erreur
+    if (!err) {
+      return next();
+    }
+
+    // log de l'erreur
+    // TODO: Supprimer le console.error en production
+    console.error(err.stack);
+
+    // Construction de la réponse de l'app express
+    // Envoi du msg erreur et du code erreur
+    return res.status(err.status).json({
+      code: err.code,
+      message: err.message
+    });
+  });
+};
+
+/**
  * Initialisation de l'instance app expressJS
  * @name init
  * @returns {object} app application express
@@ -179,6 +204,9 @@ module.exports.init = () => {
 
   // Activation des routes server
   this.initModulesServerRoutes(app);
+
+  // Activation du error handler
+  this.initModuleErrorHandler(app);
 
   return app;
 };
