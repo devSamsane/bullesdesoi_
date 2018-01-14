@@ -71,5 +71,9 @@ module.exports = {
     __TESTING__: true,
     _: false,
     ApplicationConfiguration: true
+  },
+  parserOptions: {
+    ecmaVersion: 2017,
+    sourceType: 'module'
   }
 };
