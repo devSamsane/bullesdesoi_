@@ -94,6 +94,23 @@ class CoreService {
     // Renvoi de l'objet user
     return Promise.resolve(user);
   }
+
+  /**
+   * Service de suppression d'un utilisateur
+   * @param {object} user
+   */
+  static async removeUser(user) {
+    return user.remove();
+  }
+
+  /**
+   * Service de recherche d'un user par son id
+   * @param {string} id
+   */
+  static async findUserById(id) {
+    // suppression du retour des informations sensibles
+    return User.findById(id, '-password -providerData').exec();
+  };
 }
 
 // Export de la class CoreServices
