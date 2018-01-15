@@ -12,14 +12,14 @@ const config = require('../../../lib/config/config');
  * Définition de la classe de validation des entrées des models
  * @class ModelsValidationService
  */
-class ModelsValidationService {
+class ModelService {
 
   static validateFirstname(user) {
-    return (validator.isAlpha(user.firstname, ['fr-Fr']));
+    return (validator.isAlphanumeric(user.firstname, ['fr-Fr']));
   }
 
   static validateLastname(user) {
-    return (validator.isAlpha(user.lastname, ['fr-Fr']));
+    return (validator.isAlphanumeric(user.lastname, ['fr-Fr']));
   }
 
   static validateEmail(user) {
@@ -28,4 +28,4 @@ class ModelsValidationService {
 }
 
 // Export de la classe
-module.exports = ModelsValidationService;
+module.exports = ModelService;

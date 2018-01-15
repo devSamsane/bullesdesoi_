@@ -5,20 +5,10 @@ const chalk = require('chalk');
 
 // dépendances locales
 const config = require('./../../lib/config/config');
-const ValidatorService = require('../core/services/models.server.service');
+const ModelService = require('../core/services/models.server.service');
 
 // Déclaration du schéma mongoose
 const Schema = mongoose.Schema;
-
-/**
- * Vérification de la validité de l'adresse email
- * @param {string} email email du user
- */
-/* const validateLocalStrategyEmail = email => {
-  return ((this.provider !== 'local' && 'local' && !this.updated) || validator.isEmail(email, { require_tld: false }));
-}; */
-
-
 
 /**
  * Déclaration de la structure du model User
@@ -35,7 +25,7 @@ const UserSchema = new Schema({
     default: '',
     required: [true, config.msg.global.required],
     validate: {
-      validator: ValidatorService.validateEmail,
+      validator: ModelService.validateEmail,
       message: 'Une adresse email correcte est requise'
     }
   },
@@ -44,15 +34,18 @@ const UserSchema = new Schema({
     trim: true,
     required: [true, config.msg.global.required],
     validate: {
-      validator: ValidatorService.validateFirstname,
-      message: 'Seuls les caractères A-Z sont autorisés'
+      validator: ModelService.validateFirstname,
+      message: 'Seuls les caractères [A-Z][0-9] sont autorisés'
     }
   },
   lastname: {
     type: String,
     trim: true,
     required: [true, config.msg.global.required],
-    validate: [ValidatorService.validateLastname, 'Seuls les caractères A-Z sont autorisés']
+    validate: {
+      validator: ModelService.validateLastname,
+      message: 'Seuls les caractères [A-Z][0-9] sont autorisés'
+    }
   },
   displayName: {
     type: String
