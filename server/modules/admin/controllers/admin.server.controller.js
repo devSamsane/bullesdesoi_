@@ -3,8 +3,10 @@ const mongoose = require('mongoose');
 
 // dépendances locales
 const CoreService = require('../../core/services/core.server.service');
+const AdminService = require('../services/admin.server.service');
 const ApiError = require('../../../lib/helpers/apiError.helper');
 
+const User = mongoose.model('User');
 
 /**
  * Initialisation et export de la méthode signup
@@ -55,4 +57,15 @@ exports.userById = async (req, res, next, id) => {
     return next(new ApiError(error.message));
   }
 };
+
+exports.getUsers = (req, res, next) => {
+  User.find().exec((error, users) => {
+    if (error) {
+      return next(new ApiError(error.message));
+    }
+    return res.json(users);
+  });
+};
+
+
 
