@@ -42,6 +42,22 @@ exports.removeUser = async (req, res, next) => {
 };
 
 /**
+ * Méthode de récupérations de la liste des users
+ * @name getUsers
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
+exports.getUsers = async (req, res, next) => {
+  try {
+    const users = await AdminService.getListOfUsers();
+    return res.status(200).json(users);
+  } catch (error) {
+    return next(new ApiError(error.message));
+  }
+};
+
+/**
  * Middeware user
  * Conserve un objet req.model avec les infos de l'utilisateur
  * @param {*} req
@@ -49,7 +65,7 @@ exports.removeUser = async (req, res, next) => {
  * @param {*} next
  * @param {*} id id du user
  */
-exports.userById = async (req, res, next, id) => {
+exports.getUserById = async (req, res, next, id) => {
   try {
     const user = await CoreService.findUserById(id);
     req.model = user;
@@ -58,14 +74,7 @@ exports.userById = async (req, res, next, id) => {
   }
 };
 
-exports.getUsers = (req, res, next) => {
-  User.find().exec((error, users) => {
-    if (error) {
-      return next(new ApiError(error.message));
-    }
-    return res.json(users);
-  });
-};
+
 
 
 

@@ -18,14 +18,20 @@ class AdminService {
 
   /**
    * Service de récupération de la liste des utilisateurs
-   * @static
+   * @static getListOfUsers
    * @returns {object} users
    * @memberof AdminService
    */
   static async getListOfUsers() {
-    return User.find().exec();
-
-  }
+    return new Promise((resolve, reject) => {
+      User.find({}, '-password -providerData', (error, users) => {
+        if (error) {
+          reject(error);
+        }
+        resolve(users);
+      }).exec();
+    });
+  };
 
 
 }
