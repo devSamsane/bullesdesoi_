@@ -5,9 +5,11 @@ const mongoose = require('mongoose');
 const config = require('../../../lib/config/config');
 const ApiError = require('../../../lib/helpers/apiError.helper');
 let User = require('../../models/user.server.model');
+let Seance = require('../../models/seance.server.model');
 
 // Déclarations variables
 User = mongoose.model('User');
+Seance = mongoose.model('Seance');
 
 /**
  *
@@ -19,7 +21,8 @@ class UserService {
   /**
    * Service de récupération de la liste des utilisateurs
    * @static getListOfUsers
-   * @returns {object} users
+   * @param {object} id id du user
+   * @return {object} user
    * @memberof UserService
    */
   static async getMe(id) {
@@ -32,6 +35,25 @@ class UserService {
       }).exec();
     });
   };
+
+
+  /**
+   * Service de récupération des séances pour un user
+   * @static findSeancesByUser
+   * @param {object} id id du user
+   * @memberof UserService
+   */
+  static async findSeancesByUser(id) {
+    return new Promise((resolve, reject) => {
+      Seance.find({ user: id }, (error, seances) => {
+        if (error) {
+          reject(error);
+        }
+        resolve(seances);
+      }).exec();
+    });
+  };
+
 
 
 }

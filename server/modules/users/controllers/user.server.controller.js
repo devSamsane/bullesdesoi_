@@ -10,7 +10,13 @@ const ApiError = require('../../../lib/helpers/apiError.helper');
 
 const User = mongoose.model('User');
 
-
+/**
+ *
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ * @param {*} id
+ */
 exports.getUser = async (req, res, next, id) => {
   try {
     const me = await CoreService.findUserById(id);
@@ -18,7 +24,22 @@ exports.getUser = async (req, res, next, id) => {
   } catch (error) {
     return next(new ApiError(error.message));
   }
+};
 
+/**
+ *
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ * @param {*} id
+ */
+exports.getUserSeances = async (req, res, next, id) => {
+  try {
+    const seances = await UserService.findSeancesByUser(id);
+    return seances;
+  } catch (error) {
+    return next(new ApiError(error.message));
+  }
 };
 
 /**
