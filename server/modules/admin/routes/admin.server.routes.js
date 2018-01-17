@@ -15,5 +15,5 @@ module.exports = router => {
 
   // Placer à la fin binding middleware
   // user middleware
-  router.param('userid', adminController.getUserById);
+  router.param('userId', adminController.getUserById);
 };
