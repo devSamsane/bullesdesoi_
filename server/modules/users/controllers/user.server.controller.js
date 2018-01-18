@@ -17,22 +17,6 @@ const User = mongoose.model('User');
  * @param {*} next
  * @param {*} id
  */
-exports.getUser = async (req, res, next, userId) => {
-  try {
-    const me = await CoreService.findUserById(userId);
-    req.profile = me;
-  } catch (error) {
-    return next(new ApiError(error.message));
-  }
-};
-
-/**
- *
- * @param {*} req
- * @param {*} res
- * @param {*} next
- * @param {*} id
- */
 exports.getUserSeances = async (req, res, next, id) => {
   try {
     const seances = await UserService.findSeancesByUser(id);
@@ -43,7 +27,7 @@ exports.getUserSeances = async (req, res, next, id) => {
 };
 
 /**
- * Middeware user
+ * Méthode de récupération du user authentifié
  * Conserve un objet req.model avec les infos de l'utilisateur
  * @param {*} req
  * @param {*} res
@@ -52,18 +36,36 @@ exports.getUserSeances = async (req, res, next, id) => {
  */
 exports.getMe = async (req, res) => {
   let safeUserObject = null;
-  if (req.profile) {
+  if (req.user) {
     // Sanitize l'objet user
     safeUserObject = {
-      email: validator.escape(req.profile.email),
-      firstname: validator.escape(req.profile.firstname),
-      lastname: validator.escape(req.profile.lastname),
-      displayName: validator.escape(req.profile.displayName),
-      phoneNumber: validator.escape(req.profile.phoneNumber),
-      provider: validator.escape(req.profile.provider),
-      roles: req.profile.roles,
-      created: req.profile.created.toString()
+      email: validator.escape(req.user.email),
+      firstname: validator.escape(req.user.firstname),
+      lastname: validator.escape(req.user.lastname),
+      displayName: validator.escape(req.user.displayName),
+      phoneNumber: validator.escape(req.user.phoneNumber),
+      provider: validator.escape(req.user.provider),
+      roles: req.user.roles,
+      created: req.user.created.toString()
     }
   }
   res.json(safeUserObject || null);
+};
+
+/**
+ * Middeware user
+ * Conserve un objet req.model avec les infos de l'utilisateur
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ * @param {*} id id du user
+ */
+exports.getUserById = async (req, res, next, userId) => {
+  try {
+    const user = await CoreService.findUserById(userId);
+    console.log('user: ' + user);
+    req.user = user;
+  } catch (error) {
+    return next(new ApiError(error.message));
+  }
 };

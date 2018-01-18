@@ -12,6 +12,6 @@ module.exports = router => {
   router.route('/api/user/:userId/seances').get(userController.getUserSeances);
 
   // Binding avec le middleware
-  router.param('userId', userController.getUser);
+  router.param('userId', userController.getUserById);
 
 };

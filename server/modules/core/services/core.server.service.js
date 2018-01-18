@@ -107,17 +107,17 @@ class CoreService {
    * Service de recherche d'un user par son id
    * @param {string} id
    */
-  static async findUserById(id) {
+  static async findUserById(userId) {
+    let bindedUser = User.findById(userId, '-pawword -providerData').exec();
     // suppression du retour des informations sensibles
-    return new Promise((resolve, reject) => {
-      User.findById(id, '-password -providerData').exec((error, user) => {
-        if (error) {
-          reject(error);
-        }
+    bindedUser
+      .then(user => {
         console.log(user);
-        resolve(user);
+        return user;
+      })
+      .catch(error => {
+        return error;
       });
-    });
   };
 }
 
