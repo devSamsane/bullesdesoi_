@@ -109,15 +109,14 @@ class CoreService {
    */
   static async findUserById(id) {
     // suppression du retour des informations sensibles
-    // return User.findById(id, '-password -providerData').exec();
     return new Promise((resolve, reject) => {
-      console.log(id);
-      User.findById({ id }, '-password -providerData', (error, user) => {
+      User.findById(id, '-password -providerData').exec((error, user) => {
         if (error) {
           reject(error);
         }
+        console.log(user);
         resolve(user);
-      }).exec();
+      });
     });
   };
 }

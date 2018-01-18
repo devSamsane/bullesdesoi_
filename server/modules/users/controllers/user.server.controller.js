@@ -17,9 +17,9 @@ const User = mongoose.model('User');
  * @param {*} next
  * @param {*} id
  */
-exports.getUser = async (req, res, next, id) => {
+exports.getUser = async (req, res, next, userId) => {
   try {
-    const me = await CoreService.findUserById(id);
+    const me = await CoreService.findUserById(userId);
     req.profile = me;
   } catch (error) {
     return next(new ApiError(error.message));
