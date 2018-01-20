@@ -25,10 +25,7 @@ class AdminService {
   static async getListOfUsers() {
     return new Promise((resolve, reject) => {
       User.find({}, '-password -providerData', (error, users) => {
-        if (error) {
-          reject(error);
-        }
-        resolve(users);
+        return error ? reject(error) : resolve(users);
       }).exec();
     });
   };

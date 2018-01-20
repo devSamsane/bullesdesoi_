@@ -108,16 +108,11 @@ class CoreService {
    * @param {string} id
    */
   static async findUserById(userId) {
-    let bindedUser = User.findById(userId, '-pawword -providerData').exec();
-    // suppression du retour des informations sensibles
-    bindedUser
-      .then(user => {
-        console.log(user);
-        return user;
-      })
-      .catch(error => {
-        return error;
+    return new Promise((resolve, reject) => {
+      User.findById(userId, '-password -providerData').exec((error, user) => {
+        return error ? reject(error) : resolve(user);
       });
+    });
   };
 }
 

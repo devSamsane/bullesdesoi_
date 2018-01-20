@@ -17,9 +17,9 @@ const User = mongoose.model('User');
  * @param {*} next
  * @param {*} id
  */
-exports.getUserSeances = async (req, res, next, id) => {
+exports.getUserSeances = async (req, res, next, userId) => {
   try {
-    const seances = await UserService.findSeancesByUser(id);
+    const seances = await UserService.findSeancesByUser(userId);
     return seances;
   } catch (error) {
     return next(new ApiError(error.message));
@@ -31,22 +31,20 @@ exports.getUserSeances = async (req, res, next, id) => {
  * Conserve un objet req.model avec les infos de l'utilisateur
  * @param {*} req
  * @param {*} res
- * @param {*} next
- * @param {*} id id du user
  */
 exports.getMe = async (req, res) => {
   let safeUserObject = null;
-  if (req.user) {
+  if (req.profile) {
     // Sanitize l'objet user
     safeUserObject = {
-      email: validator.escape(req.user.email),
-      firstname: validator.escape(req.user.firstname),
-      lastname: validator.escape(req.user.lastname),
-      displayName: validator.escape(req.user.displayName),
-      phoneNumber: validator.escape(req.user.phoneNumber),
-      provider: validator.escape(req.user.provider),
-      roles: req.user.roles,
-      created: req.user.created.toString()
+      email: validator.escape(req.profile.email),
+      firstname: validator.escape(req.profile.firstname),
+      lastname: validator.escape(req.profile.lastname),
+      displayName: validator.escape(req.profile.displayName),
+      phoneNumber: validator.escape(req.profile.phoneNumber),
+      provider: validator.escape(req.profile.provider),
+      roles: req.profile.roles,
+      created: req.profile.created.toString()
     }
   }
   res.json(safeUserObject || null);
@@ -58,13 +56,13 @@ exports.getMe = async (req, res) => {
  * @param {*} req
  * @param {*} res
  * @param {*} next
- * @param {*} id id du user
+ * @param {*} userId id du user
  */
 exports.getUserById = async (req, res, next, userId) => {
   try {
     const user = await CoreService.findUserById(userId);
-    console.log('user: ' + user);
-    req.user = user;
+    req.profile = user;
+    next();
   } catch (error) {
     return next(new ApiError(error.message));
   }

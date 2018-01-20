@@ -65,10 +65,11 @@ exports.getUsers = async (req, res, next) => {
  * @param {*} next
  * @param {*} id id du user
  */
-exports.getUserById = async (req, res, next, id) => {
+exports.getUserById = async (req, res, next, userId) => {
   try {
-    const user = await CoreService.findUserById(id);
+    const user = await CoreService.findUserById(userId);
     req.model = user;
+    next();
   } catch (error) {
     return next(new ApiError(error.message));
   }

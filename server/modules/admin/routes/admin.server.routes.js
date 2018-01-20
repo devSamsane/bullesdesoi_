@@ -8,7 +8,9 @@ const adminController = require('../controllers/admin.server.controller');
 const router = express.Router();
 
 module.exports = router => {
-  // TODO: Importer les routes utilisateurs en premier pour éviter un accès non autorisé
+  // Importer les routes utilisateurs en premier pour éviter un accès non autorisé
+  require('../../users/routes/user.server.routes');
+
   router.route('/api/admin/users/').post(adminController.signup);
   router.route('/api/admin/users/').get(adminController.getUsers);
   router.route('/api/admin/users/:userId').delete(adminController.removeUser);
