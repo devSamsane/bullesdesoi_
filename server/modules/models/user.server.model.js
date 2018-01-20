@@ -1,7 +1,7 @@
 // dépendances NPM
 const mongoose = require('mongoose');
 const chalk = require('chalk');
-// const validator = require('validator');
+const validator = require('validator');
 
 // dépendances locales
 const config = require('./../../lib/config/config');
@@ -25,7 +25,7 @@ const UserSchema = new Schema({
     default: '',
     required: [true, config.msg.global.required],
     validate: {
-      validator: ModelService.validateEmail,
+      validator: value => { return validator.isEmail(value, { require_tld: false }) },
       message: 'Une adresse email correcte est requise'
     }
   },
@@ -34,7 +34,7 @@ const UserSchema = new Schema({
     trim: true,
     required: [true, config.msg.global.required],
     validate: {
-      validator: ModelService.validateFirstname,
+      validator: value => { return validator.isAlphanumeric(value, ['fr-FR']) },
       message: 'Seuls les caractères [A-Z][0-9] sont autorisés'
     }
   },
@@ -43,7 +43,7 @@ const UserSchema = new Schema({
     trim: true,
     required: [true, config.msg.global.required],
     validate: {
-      validator: ModelService.validateLastname,
+      validator: value => { return validator.isAlphanumeric(value, ['fr-FR']) },
       message: 'Seuls les caractères [A-Z][0-9] sont autorisés'
     }
   },
@@ -173,6 +173,7 @@ function seed(doc, options) {
           });
         }
 
+        // Définition du user
         const user = new User(doc);
         user.provider = user.provider || 'local';
         user.password = user.password || 'password';
