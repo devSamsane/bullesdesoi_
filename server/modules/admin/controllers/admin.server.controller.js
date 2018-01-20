@@ -35,7 +35,7 @@ exports.signup = async (req, res, next) => {
  */
 exports.removeUser = async (req, res, next) => {
   try {
-    const user = await CoreService.deleteUser(req.model);
+    const user = await AdminService.removeUser(req.model);
   } catch (error) {
     return next(new ApiError(error.message));
   }

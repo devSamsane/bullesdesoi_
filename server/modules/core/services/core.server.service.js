@@ -96,14 +96,6 @@ class CoreService {
   }
 
   /**
-   * Service de suppression d'un utilisateur
-   * @param {object} user
-   */
-  static async removeUser(user) {
-    return user.remove();
-  }
-
-  /**
    * Service de recherche d'un user par son id
    * @param {string} id
    */

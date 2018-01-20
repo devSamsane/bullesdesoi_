@@ -30,6 +30,17 @@ class AdminService {
     });
   };
 
+  /**
+   * Service de suppression d'un utilisateur
+   * @param {object} user
+   */
+  static async removeUser(user) {
+    return new Promise((resolve, reject) => {
+      User.remove(user, (error) => {
+        return error ? reject(error) : resolve();
+      });
+    });
+  };
 
 }
 
