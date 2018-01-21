@@ -111,6 +111,7 @@ function seed(doc, options) {
               return reject(error);
             }
             relaxation.user = seance.user;
+            relaxation.seance = seance._id;
             relaxation.save((error, result) => {
               if (error) {
                 return reject(error);

@@ -118,6 +118,7 @@ function seed(doc, options) {
               return reject(error);
             }
             sophronisation.user = seance.user;
+            sophronisation.seance = seance._id;
             sophronisation.save((error, result) => {
               if (error) {
                 return reject(error);
