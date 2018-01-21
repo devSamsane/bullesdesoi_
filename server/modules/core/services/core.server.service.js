@@ -5,6 +5,7 @@ const path = require('path');
 const bcrypt = require('bcrypt');
 const owasp = require('owasp-password-strength-test');
 const mongoose = require('mongoose');
+const passport = require('passport');
 
 // dépendances locales
 const config = require('../../../lib/config/config');
@@ -117,6 +118,21 @@ class CoreService {
   };
 
   /**
+   * Service de recherche du user par son email
+   * @static findUserByEmail
+   * @param {string} email
+   * @returns {object} user
+   * @memberof CoreService
+   */
+  static findUserByEmail(email) {
+    return new Promise((resolve, reject) => {
+      User.findOne({ email: String(email) }).exec((error, user) => {
+        return error ? reject(error) : resolve(user);
+      });
+    });
+  }
+
+  /**
    * Service de recherche des seances pour un user
    * @static getSeances
    * @param {string} userId
@@ -130,7 +146,6 @@ class CoreService {
       });
     });
   }
-
 
   /**
    * Service de récupération de tous les éléments d'une seance par id de seance
@@ -174,6 +189,12 @@ class CoreService {
       Sophronisation.find({ seance: seanceId }).exec((error, sophronisations) => {
         return error ? reject(error) : resolve(sophronisations);
       });
+    });
+  }
+
+  static async signin() {
+    return new Promise((resolve, reject) => {
+
     });
   }
 }
