@@ -58,6 +58,45 @@ exports.getUsers = async (req, res, next) => {
 };
 
 /**
+ * Méthode de récupération de la liste des seances pour un user
+ * @name getSeances
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
+exports.getSeances = async (req, res, next) => {
+  try {
+    const seances = await CoreService.getSeancesByUser(req.model._id);
+    return res.status(200).json(seances);
+  } catch (error) {
+    return next(new ApiError(error.message));
+  }
+}
+
+/**
+ * Méthode de récupération par id d'une seance complétée des relaxations et sophronisations
+ * @name getSeance
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
+exports.getSeance = async (req, res, next) => {
+  try {
+    const seanceId = req.params.seanceId;
+    const seance = await CoreService.getSeanceById(seanceId);
+    return res.status(200).json(seance);
+  } catch (error) {
+    return next(new ApiError(error.message));
+  }
+}
+
+
+
+
+
+
+
+/**
  * Middeware user
  * Conserve un objet req.model avec les infos de l'utilisateur
  * @param {*} req
@@ -74,8 +113,3 @@ exports.getUserById = async (req, res, next, userId) => {
     return next(new ApiError(error.message));
   }
 };
-
-
-
-
-

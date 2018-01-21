@@ -9,11 +9,17 @@ const mongoose = require('mongoose');
 // dépendances locales
 const config = require('../../../lib/config/config');
 let User = require('../../models/user.server.model');
+let Seance = require('../../models/seance.server.model');
+let Relaxation = require('../../models/relaxation.server.model');
+let Sophronisation = require('../../models/sophronisation.server.model');
 
 // Déclarations variables
 const SALT_ROUNDS = 10;
 owasp.config(config.shared.owasp);
 User = mongoose.model('User');
+Seance = mongoose.model('Seance');
+Relaxation = mongoose.model('Relaxation');
+Sophronisation = mongoose.model('Sophronisation');
 
 /**
  * Définition de la class CoreService
@@ -97,7 +103,10 @@ class CoreService {
 
   /**
    * Service de recherche d'un user par son id
-   * @param {string} id
+   * @static findUserById
+   * @param {string} userId
+   * @returns {object} user
+   * @memberof CoreService
    */
   static async findUserById(userId) {
     return new Promise((resolve, reject) => {
@@ -106,6 +115,67 @@ class CoreService {
       });
     });
   };
+
+  /**
+   * Service de recherche des seances pour un user
+   * @static getSeances
+   * @param {string} userId
+   * @returns {object} seances
+   * @memberof CoreService
+   */
+  static async getSeancesByUser(userId) {
+    return new Promise((resolve, reject) => {
+      Seance.find({ user: userId }).exec((error, seances) => {
+        return error ? reject(error) : resolve(seances);
+      });
+    });
+  }
+
+
+  /**
+   * Service de récupération de tous les éléments d'une seance par id de seance
+   * @static getSeanceById
+   * @param {string} seanceId
+   * @returns {object} seance
+   * @memberof CoreService
+   */
+  static async getSeanceById(seanceId) {
+    return new Promise((resolve, reject) => {
+      Seance.findOne({ _id: seanceId }).populate('sophronisations').populate('relaxations').exec((error, seance) => {
+        return error ? reject(error) : resolve(seance);
+      });
+    });
+  }
+
+  /**
+   * Service de récupération des relaxations par seanceId
+   * @static getRelaxationBySeance
+   * @param {string} seanceId
+   * @returns {object} relaxations
+   * @memberof CoreService
+   */
+  static async getRelaxationBySeance(seanceId) {
+    return new Promise((resolve, reject) => {
+      Relaxation.find({ seance: seanceId }).exec((error, relaxations) => {
+        return error ? reject(error) : resolve(relaxations);
+      });
+    });
+  }
+
+  /**
+   * Service de récupération des sophronisations par seanceId
+   * @static getSophronisationBySeance
+   * @param {string} seanceId
+   * @returns {object} Sophronisations
+   * @memberof CoreService
+   */
+  static async getSophronisationBySeance(seanceId) {
+    return new Promise((resolve, reject) => {
+      Sophronisation.find({ seance: seanceId }).exec((error, sophronisations) => {
+        return error ? reject(error) : resolve(sophronisations);
+      });
+    });
+  }
 }
 
 // Export de la class CoreServices

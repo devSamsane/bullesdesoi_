@@ -11,22 +11,6 @@ const ApiError = require('../../../lib/helpers/apiError.helper');
 const User = mongoose.model('User');
 
 /**
- *
- * @param {*} req
- * @param {*} res
- * @param {*} next
- * @param {*} id
- */
-exports.getUserSeances = async (req, res, next, userId) => {
-  try {
-    const seances = await UserService.findSeancesByUser(userId);
-    return seances;
-  } catch (error) {
-    return next(new ApiError(error.message));
-  }
-};
-
-/**
  * Méthode de récupération du user authentifié
  * Conserve un objet req.model avec les infos de l'utilisateur
  * @param {*} req
@@ -49,6 +33,32 @@ exports.getMe = async (req, res) => {
   }
   res.json(safeUserObject || null);
 };
+
+/**
+ * Méthode de récupération des seances pour le user authentifié
+ * @name getUserSeances
+ * @param req
+ * @param res
+ * @param next
+ */
+exports.getUserSeances = async (req, res, next) => {
+  try {
+    const seances = await CoreService.getSeancesByUser(req.profile._id)
+    return res.status(200).json(seances);
+  } catch (error) {
+    return next(new ApiError(error.message));
+  }
+}
+
+exports.getUserSeance = async (req, res, next) => {
+  try {
+    const seanceId = req.params.seanceId;
+    const seance = await CoreService.getSeanceById(seanceId)
+    return res.status(200).json(seance);
+  } catch (error) {
+    return next(new ApiError(error.message));
+  }
+}
 
 /**
  * Middeware user

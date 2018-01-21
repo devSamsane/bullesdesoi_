@@ -14,6 +14,8 @@ module.exports = router => {
   router.route('/api/admin/users/').post(adminController.signup);
   router.route('/api/admin/users/').get(adminController.getUsers);
   router.route('/api/admin/users/:userId').delete(adminController.removeUser);
+  router.route('/api/admin/users/:userId/seances').get(adminController.getSeances);
+  router.route('/api/admin/users/:userId/seances/:seanceId').get(adminController.getSeance);
 
   // Placer à la fin binding middleware
   // user middleware
