@@ -1,17 +1,17 @@
 // dépendances NPM
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
 // dépendances locales
-let User = require('../modules/models/user.server.model');
-const AuthService = require('../modules/core/services/auth.server.service');
-const ApiError = require('../lib/helpers/apiError.helper');
+// let User = require('../modules/models/user.server.model');
+const AuthService = require('../services/auth.server.service');
+const ApiError = require('../../../../lib/helpers/apiError.helper');
 
 // Déclaration variables
-User = mongoose.model('User');
+// User = mongoose.model('User');
 
-module.exports = () => {
+module.exports = (config) => {
   passport.use(new LocalStrategy({
     // Mapping des champs du user avec le model passport
     usernameField: 'email',

@@ -2,7 +2,7 @@
 const bcrypt = require('bcrypt');
 
 // dépendances locales
-const CoreService = require('../services/core.server.service');
+const CoreService = require('../../../core/services/core.server.service');
 
 
 
