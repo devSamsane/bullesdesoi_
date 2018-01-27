@@ -6,12 +6,12 @@ const LocalStrategy = require('passport-local').Strategy;
 // dépendances locales
 // let User = require('../modules/models/user.server.model');
 const AuthService = require('../services/auth.server.service');
-const ApiError = require('../../../../lib/helpers/apiError.helper');
+const ApiError = require('../../../lib/helpers/apiError.helper');
 
 // Déclaration variables
 // User = mongoose.model('User');
 
-module.exports = (config) => {
+module.exports = config => {
   passport.use(new LocalStrategy({
     // Mapping des champs du user avec le model passport
     usernameField: 'email',

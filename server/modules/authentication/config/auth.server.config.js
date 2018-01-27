@@ -5,7 +5,7 @@ const path = require('path')
 const passport = require('passport');
 
 // dépendances locales
-const config = require('../../../../lib/config/config');
+const config = require('../../../lib/config/config');
 const AuthService = require('../services/auth.server.service');
 
 module.exports = app => {

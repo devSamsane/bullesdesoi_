@@ -125,7 +125,7 @@ const initGlobalConfigFiles = (config, assets) => {
   config.files.server.models = getGlobbedPaths(assets.server.models);
 
   // Récupération des fichiers de configuration
-  config.files.configs = getGlobbedPaths(assets.server.config);
+  config.files.server.configs = getGlobbedPaths(assets.server.config);
 
   // Récupération des fichiers de routes
   config.files.server.routes = getGlobbedPaths(assets.server.routes);

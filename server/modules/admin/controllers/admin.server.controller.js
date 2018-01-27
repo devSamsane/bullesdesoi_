@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 // dépendances locales
 const CoreService = require('../../core/services/core.server.service');
-const AdminService = require('../services/admin.server.service');
+const AdminService = require('../../admin/services/admin.server.service');
 const ApiError = require('../../../lib/helpers/apiError.helper');
 
 const User = mongoose.model('User');
