@@ -121,13 +121,9 @@ module.exports.initHelmetHeaders = app => {
  * @param {object} app objet représentant l'instance de l'application express
  */
 module.exports.initModulesConfiguration = app => {
-  if (!config.files.server.config) {
-    return '';
-  } else {
-    config.files.server.configs.forEach(configPath => {
-      require(path.resolve(configPath))(app);
-    });
-  }
+  config.files.server.configs.forEach(configPath => {
+    require(path.resolve(configPath))(app);
+  });
 };
 
 /**
