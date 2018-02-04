@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const hbs = require('express-hbs');
 const helmet = require('helmet');
-const lusca = require('lusca')
+const lusca = require('lusca');
 
 // dépendances internes
 const config = require('../config/config');
