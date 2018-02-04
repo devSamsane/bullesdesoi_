@@ -1,35 +1,15 @@
 // dépendances NPM
+const _ = require('lodash');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 // dépendances locales
 const CoreService = require('../../core/services/core.server.service');
 const ApiError = require('../../../lib/helpers/apiError.helper');
-
+const config = require('../../../lib/config/config');
 
 
 class AuthService {
-
-  // /**
-  //  * Service de déserialisation du user en vue de le charger côté client
-  //  * @static deserialize
-  //  * @param {object} user
-  //  * @returns {string}
-  //  * @memberof AuthService
-  //  */
-  // static deserialize(user) {
-  //   if (!user || typeof user !== 'object') {
-  //     return null;
-  //   }
-  //   return {
-  //     id: user.id,
-  //     displayName: user.displayName,
-  //     firstname: user.firstname,
-  //     lastname: user.lastname,
-  //     email: user.email,
-  //     provider: user.provider,
-  //     created: user.created
-  //   };
-  // }
 
   /**
    * Service de vérification du mot de passe
@@ -41,6 +21,42 @@ class AuthService {
    */
   static async comparePassword(password, storedPassword) {
     return bcrypt.compare(String(password), String(storedPassword));
+  }
+
+  /**
+   * Service de création du token jwt
+   * @static generateJWT
+   * @param {object} user
+   * @param {object} options options de configuration du jwt
+   * @memberof AuthService
+   */
+  static async generateJWT(user, options) {
+    try {
+
+      // Création du timestamp
+      const timestamp = new Date().getTime();
+
+      // Configuration du payload
+      const payload = {
+        sub: user.id.toString(),
+        email: user.email.toString(),
+        iat: timestamp
+      };
+
+      // Configuration des options du jwt
+      const jwtOptions = _.merge(config.jwt.options, options);
+
+      // Génération du token
+      const token = jwt.sign(payload, config.jwt.secret, jwtOptions);
+
+      return token;
+
+    } catch (error) {
+      return new ApiError('Erreur: token non généré', {
+        status: '500',
+        code: 'SERVER_ERROR'
+      });
+    }
   }
 
   /**

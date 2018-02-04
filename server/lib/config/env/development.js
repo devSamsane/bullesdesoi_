@@ -9,6 +9,16 @@ module.exports = {
   host: process.env.HOST || '0.0.0.0',
   domain: process.env.DOMAIN || 'http://localhost',
   livereload: true,
+  jwt: {
+    secret: process.env.JWT_SECRET || 'secret',
+    options: {
+      expiresIn: process.env.JWT_EXPIRES_IN || '1d',
+      header: {
+        'alg': 'HS256',
+        'typ': 'JWT'
+      }
+    }
+  },
   db: {
     uri: process.env.MONGODB_URI || `mongodb://${process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost'}/bullesdesoi-dev`
   },
