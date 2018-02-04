@@ -13,5 +13,6 @@ module.exports = app => {
     require(path.resolve(strategy))(config);
   });
 
+  // Initialisation du middleware passport
   app.use(passport.initialize());
-}
+};

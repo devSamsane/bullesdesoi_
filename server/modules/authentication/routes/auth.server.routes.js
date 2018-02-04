@@ -9,5 +9,5 @@ const authController = require('../controllers/auth.server.controller');
 const router = express.Router();
 
 module.exports = router => {
-  router.route('/api/auth/signin').post(passport.authenticate('local'), authController.signin);
+  router.route('/api/auth/signin').post(passport.authenticate('local', { session: false }), authController.signin);
 }
